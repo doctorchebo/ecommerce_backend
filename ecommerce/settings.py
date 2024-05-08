@@ -25,12 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-9(_42!^3g432gh&o&3x#othg$(6ee@-r#=r=myr(m=m6$8_f@p'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(os.getenv('DEBUG', False)))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
 # Application definition
@@ -158,3 +158,53 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
+
+#Logging
+LOG_TO_FILE = os.getenv('LOG_TO_FILE') == 'True' 
+
+formatters = {
+    'verbose': {
+        'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+        'style': '{',
+    },
+    'simple': {
+        'format': '{levelname} {message}',
+        'style': '{',
+    },
+}
+
+handlers = {
+    'console': {
+        'class': 'logging.StreamHandler',
+        'formatter': 'simple',
+    },
+}
+
+if LOG_TO_FILE:  
+    handlers['file'] = {
+        'level': 'INFO',
+        'class': 'logging.FileHandler',
+        'filename': '/var/log/django.log',
+        'formatter': 'verbose',
+    }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': formatters,
+    'handlers': handlers,
+    'root': {
+        'handlers': list(handlers.keys()),
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': list(handlers.keys()),  # Use all handlers
+            'level': 'INFO',
+        },
+        'django_q': {
+            'handlers': list(handlers.keys()),  # Use all handlers
+            'level': 'DEBUG',
+        },
+    },
+}
