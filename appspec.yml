@@ -1,0 +1,19 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/ecommerce/ecommerce/
+    overwrite: yes
+file_exists_behavior: OVERWRITE
+hooks:
+  ApplicationStop:
+    - location: scripts/stop_server.sh
+  BeforeInstall:
+    - location: scripts/clean_pycache.sh
+    - location: scripts/install_dependencies.sh
+    - location: scripts/copy_env_file.sh
+  AfterInstall:
+    - location: scripts/run_migrations.sh
+    - location: scripts/collect_static.sh
+  ApplicationStart:
+    - location: scripts/start_server.sh
