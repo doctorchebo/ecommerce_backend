@@ -3,7 +3,6 @@ from typing import Any
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-
 class PointsValueListFilter(admin.SimpleListFilter):
     title = _("Points Value Range")
     parameter_name = "Range"
