@@ -1,4 +1,4 @@
-name: Django CD
+name: Auto deploy to EC2 instance
 
 on:
   push:
@@ -21,9 +21,10 @@ jobs:
 
     - name: Deploy to AWS CodeDeploy
       run: |
-        aws deploy push --application-name my-django-blog \
-          --s3-location s3://escapa-la-matrix-s3-bucket/my-django-blog.zip
+        aws deploy push --application-name ecommerce \
+          --s3-location s3://ecommerce-bucket-dxn/ecommerce.zip
 
-        aws deploy create-deployment --application-name my-django-blog \
-          --deployment-group-name my-django-blog-group \
-          --s3-location bucket=escapa-la-matrix-s3-bucket,key=my-django-blog.zip,bundleType=zip
+        aws deploy create-deployment --application-name ecommerce \
+          --deployment-group-name ecommerce \
+          --s3-location bucket=ecommerce-bucket-dxn,key=ecommerce.zip,bundleType=zip
+
