@@ -22,8 +22,8 @@ jobs:
     - name: Deploy to AWS CodeDeploy
       run: |
         aws deploy push --application-name ecommerce \
-          --s3-location s3://ecommerce-bucket/ecommerce.zip
+          --s3-location s3://ecommerce-bucket-dxn/ecommerce.zip
 
         aws deploy create-deployment --application-name ecommerce \
           --deployment-group-name ecommerce \
-          --s3-location bucket=ecommerce-bucket,key=ecommerce.zip,bundleType=zip
+          --s3-location bucket=ecommerce-bucket-dxn,key=ecommerce.zip,bundleType=zip
